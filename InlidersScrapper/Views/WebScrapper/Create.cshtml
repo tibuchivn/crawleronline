@@ -1,0 +1,109 @@
+﻿@model InlidersScrapper.Models.WebScrapper
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<div id="container">
+    <div class="form-horizontal">
+        <h4>Web Scraper</h4>
+        <hr />
+        <div class="form-group">
+            <div class="control-label col-md-2">
+                Url
+            </div>
+            <div class="col-md-10">
+                <input type="text" id="txtUrl" class="form-control" placeholder="http://google.com" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="control-label col-md-2">
+                Selector Type
+            </div>
+            <div class="col-md-10">
+                <select id="selectType" class="form-control">
+                    <option value="1">By Id</option>
+                    <option value="2">By Class</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="control-label col-md-2">
+                Selector Value
+            </div>
+            <div class="col-md-10">
+                <input type="text" id="txtSelectorValue" class="form-control" placeholder="mainSite, content" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Create" class="btn btn-default" id="btnCreate" />
+                <input type="button" value="Preview" class="btn btn-default" id="btnPreview" />
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body" id="previewPanel"></div>
+    </div>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(function() {
+            $('#btnPreview').click(function () {
+                $('#container').waitMe();
+                var data = BuildFormData();
+                $.ajax({
+                    url: '@Url.Action("PreviewUrl")',
+                    data: data,
+                    method: 'POST',
+                    success: function(response) {
+                        if (response.success === true) {
+                            var html = '';
+                            $.each(response.data, function(i, parsedResult) {
+                                html += parsedResult;
+                                console.log(parsedResult);
+                            });
+                            $('#previewPanel').html(html);
+                        } else {
+                            $('#previewPanel').html('');
+                        }
+                        $('#container').waitMe('hide');
+                    },
+                    error: function(error) {
+                        $('#previewPanel').html('');
+                        $('#container').waitMe('hide');
+                        alert(error);
+                    }
+                });
+            });
+
+            $('#btnCreate').click(function() {
+                var data = BuildFormData();
+                $.ajax({
+                    url: '@Url.Action("CreateNewScraper")',
+                    data: data,
+                    method: 'POST',
+                    success: function() {
+                        window.location.replace('@Url.Action("Index")');
+                    },
+                    error: function (error){alert(error);}
+                });
+            });
+        });
+
+        function BuildFormData() {
+            var url = $('#txtUrl').val();
+            var selectorType = $('#selectType').val();
+            var selectorValue = $('#txtSelectorValue').val();
+            return { url: url, selectorType: selectorType, selectorValue: selectorValue };
+        }
+    </script>
+}

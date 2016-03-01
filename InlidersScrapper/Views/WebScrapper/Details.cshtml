@@ -1,0 +1,57 @@
+﻿@model InlidersScrapper.Models.ViewModel.WebScraperDetailViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>WebScrapper</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SelectorType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SelectorType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SelectorValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SelectorValue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WebContent)
+        </dt>
+
+        <dd>
+            @Html.Raw(Model.WebContent)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
